@@ -46,3 +46,4 @@ if __name__ == "__main__":
         print("A BFS a partir do LABTEC alcança todas as portas.")
     else:
         print("Portas não alcançadas a partir do LABTEC:", ", ".join(nao_alcancadas))
+

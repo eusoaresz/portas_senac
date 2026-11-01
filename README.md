@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Rotas do Prédio com Grafos
 
 Trabalho de **Algoritmos e Estruturas de Dados II**, mapeando o prédio de nossa faculdade, UniSenac
@@ -68,3 +69,8 @@ Todas as buscas têm a mesma assinatura: `funcao(grafo, origem, destino)` devolv
 **Nenhuma das três garante o menor custo.** Para isso serve o Dijkstra, que ainda não está implementado.
 A BFS conta portas, e todas as arestas valem o mesmo para ela. O caminho pelo pátio tem só duas arestas, mas uma delas é longa (25 passos). O Dijkstra soma os pesos. Por isso aceita passar por mais portas (6 contra 3) e chega com 12 passos a menos.
 
+=======
+# Mapeamento do prédio UniSenac
+
+Atividade de Algoritmos e Estruturas de Dados II. O programa mapeia as portas do UniSenac a partir de um grafo e procura cada porta em arestas. Começa a partir do LabTech como ponto 0.
+>>>>>>> 1a56eb594fd1164a63d3f7b321704cf23a06a8d6
