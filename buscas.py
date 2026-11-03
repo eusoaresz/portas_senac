@@ -3,6 +3,7 @@
 # visitados = portas examinadas até achar o destino (o destino conta).
 import sys
 from collections import deque
+import heapq
 
 from grafo import carregar_grafo
 
@@ -103,22 +104,73 @@ def gulosa(grafo, origem, destino):
             caminho.append(melhor)
     return [], 0, len(visitados)
 
+def dijkstra(grafo, origem, destino):
+    # Começa todas as distâncias como infinitas, menos a origem
+    distancia = {porta: float("inf") for porta in grafo}
+    anterior = {origem: None}
+    distancia[origem] = 0
+
+    # a heap sempre devolve a porta com menor distância atual
+    fila = [(0, origem)]
+    finalizadas = set()
+
+    while fila:
+        distancia_atual, atual = heapq.heappop(fila)
+
+        # ignora portas que já foram finalizadas
+        if atual in finalizadas:
+            continue
+        finalizadas.add(atual)
+
+        if atual == destino:
+            break
+
+        # atualiza os vizinhos quando encontra um caminho menor
+        for vizinho, peso in grafo[atual]:
+            nova_distancia = distancia_atual + peso
+
+            if nova_distancia < distancia[vizinho]:
+                distancia[vizinho] = nova_distancia
+                anterior[vizinho] = atual
+                heapq.heappush(fila, (nova_distancia, vizinho))
+
+    # monta o caminho usando as portas anteriores registradas
+    caminho = reconstruir(anterior, destino)
+
+    return caminho, distancia[destino], len(finalizadas)
+
 
 # usado pela API e pelo modo de linha de comando; o Dijkstra entra aqui depois
-algoritmos = {"bfs": bfs, "dfs": dfs, "gulosa": gulosa}
+algoritmos = {"bfs": bfs, "dfs": dfs, "gulosa": gulosa, "dijkstra": dijkstra}
+
+
+def perguntar_porta(texto, grafo):
+    # pergunta o nome da porta e repete até digitar uma que existe; "?" mostra a lista
+    while True:
+        porta = input(texto).strip().upper()
+        if porta == "?":
+            print(", ".join(sorted(grafo)))
+        elif porta in grafo:
+            return porta
+        else:
+            print("Porta não encontrada. Digite ? para ver a lista.")
+
 
 
 if __name__ == "__main__":
-    # uso: python buscas.py origem destino
+    # usado pela API e pelo modo de linha de comando; o Dijkstra entra aqui depois
     origem = "LABTEC"
     destino = "SAIDA_P2"
+    grafo = carregar_grafo()
+
     if len(sys.argv) > 2:
         origem = sys.argv[1].upper()
         destino = sys.argv[2].upper()
-
-    grafo = carregar_grafo()
-    if origem not in grafo or destino not in grafo:
-        sys.exit("Porta não encontrada. Use os nomes do arestas.txt.")
+        if origem not in grafo or destino not in grafo:
+            sys.exit("Porta não encontrada. Use os nomes do arestas.txt.")
+    else:
+        origem = perguntar_porta("Origem (? lista as portas): ", grafo)
+        destino = perguntar_porta("Destino: ", grafo)
 
     print(origem, "->", destino)
     print()
