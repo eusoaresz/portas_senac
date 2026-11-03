@@ -8,9 +8,9 @@ O projeto implementa quatro estratégias de busca e uma API em FastAPI para cons
 
 ## Integrantes
 
-Arthur Holz Leite
-Roger Pereira Soares
-Heitor Barbosa Hepp
+* Arthur Holz Leite
+* Roger Pereira Soares
+* Heitor Barbosa Hepp
 
 ## Estrutura do grafo
 
