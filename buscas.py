@@ -1,3 +1,6 @@
+# buscas.py - BFS, DFS e busca gulosa no grafo do prédio.
+# as três funções recebem (grafo, origem, destino) e devolvem (caminho, custo, visitados).
+# visitados = portas examinadas até achar o destino (o destino conta).
 import sys
 from collections import deque
 
@@ -5,6 +8,7 @@ from grafo import carregar_grafo
 
 
 def reconstruir(anterior, destino):
+    # parte do destino e volta pelos antecessores até a origem, depois inverte a lista
     if destino not in anterior:
         return []
     caminho = []
@@ -16,12 +20,14 @@ def reconstruir(anterior, destino):
 
 
 def peso_da_aresta(grafo, a, b):
+    # devolve o peso da aresta entre duas portas, ou None se não houver aresta
     for vizinho, peso in grafo[a]:
         if vizinho == b:
             return peso
-
+    return None
 
 def custo_do_caminho(grafo, caminho):
+    # soma os pesos das arestas entre cada par de portas seguidas do caminho
     custo = 0
     for i in range(len(caminho) - 1):
         custo += peso_da_aresta(grafo, caminho[i], caminho[i + 1])
@@ -29,6 +35,7 @@ def custo_do_caminho(grafo, caminho):
 
 
 def bfs(grafo, origem, destino):
+    # BFS usa fila, então explora por camadas de portas e ignora o peso das arestas
     fila = deque([origem])
     anterior = {origem: None}
     visitados = 0
@@ -47,6 +54,7 @@ def bfs(grafo, origem, destino):
 
 
 def visitar(grafo, atual, destino, anterior):
+    # parte recursiva da DFS: entra no primeiro vizinho novo e só volta se não achar o destino
     if atual == destino:
         return True
     for vizinho, peso in grafo[atual]:
@@ -58,14 +66,18 @@ def visitar(grafo, atual, destino, anterior):
 
 
 def dfs(grafo, origem, destino):
+    # o caminho depende da ordem dos vizinhos, que é a ordem das linhas do arestas.txt
     anterior = {origem: None}
     visitar(grafo, origem, destino, anterior)
     caminho = reconstruir(anterior, destino)
     custo = custo_do_caminho(grafo, caminho)
+    # na DFS toda porta descoberta é visitada na hora, então visitados = len(anterior)
     return caminho, custo, len(anterior)
 
 
 def gulosa(grafo, origem, destino):
+    # gulosa: em cada porta vai para o vizinho ainda não visitado com a menor aresta
+    # ela não compara com outros caminhos, por isso não garante o menor custo
     caminho = [origem]
     visitados = [origem]
     while len(caminho) > 0:
@@ -84,6 +96,7 @@ def gulosa(grafo, origem, destino):
                 melhor = vizinho
 
         if melhor is None:
+            # beco sem saída: recua uma porta para não ficar presa
             caminho.pop()
         else:
             visitados.append(melhor)
@@ -91,10 +104,12 @@ def gulosa(grafo, origem, destino):
     return [], 0, len(visitados)
 
 
+# usado pela API e pelo modo de linha de comando; o Dijkstra entra aqui depois
 algoritmos = {"bfs": bfs, "dfs": dfs, "gulosa": gulosa}
 
 
 if __name__ == "__main__":
+    # uso: python buscas.py origem destino
     origem = "LABTEC"
     destino = "SAIDA_P2"
     if len(sys.argv) > 2:

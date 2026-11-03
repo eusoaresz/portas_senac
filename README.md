@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Rotas do Prédio com Grafos
 
 Trabalho de **Algoritmos e Estruturas de Dados II**, mapeando o prédio de nossa faculdade, UniSenac
@@ -73,4 +72,3 @@ A BFS conta portas, e todas as arestas valem o mesmo para ela. O caminho pelo p�
 # Mapeamento do prédio UniSenac
 
 Atividade de Algoritmos e Estruturas de Dados II. O programa mapeia as portas do UniSenac a partir de um grafo e procura cada porta em arestas. Começa a partir do LabTech como ponto 0.
->>>>>>> 1a56eb594fd1164a63d3f7b321704cf23a06a8d6
